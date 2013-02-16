@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="deschdanja\DoctrineBaseTest\Entities\User">
+        <id name="IDUser" type="integer">
+            <generator strategy="IDENTITY" />
+        </id>
+        <field name="username" type="string" length="30" />
+        <field name="firstname" type="text" />
+        <field name="lastname" type="text" />
+        <one-to-one field="Credentials" target-entity="UserCredentials" mapped-by="id" />
+        <one-to-many field="Addresses" target-entity="Address" mapped-by="id" />
+        
+        <many-to-many field="Groups" target-entity="UserGroup">
+            <join-table name="groups2user">
+                <join-columns>
+                    <join-column name="IDUser" referenced-column-name="IDUser"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="IDGroup" referenced-column-name="IDGroup"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+
+    </entity>
+    
+</doctrine-mapping>
+
