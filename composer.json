@@ -12,7 +12,7 @@
     
     "description": "Foundation for deschdanja projects using doctrine",
     
-    "homepage": "http://github.com/deschdanja/ClassBuilder",
+    "homepage": "http://github.com/deschdanja/DoctrineBase",
     
     "require": {
         "php": ">=5.3.0",
