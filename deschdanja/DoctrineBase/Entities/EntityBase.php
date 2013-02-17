@@ -1,6 +1,7 @@
 <?php
 
 namespace deschdanja\DoctrineBase\Entities;
+use deschdanja\DoctrineBase\ManipulationDefinitionCollection;
 
 /**
  * Class provides base functionality for doctrine 2 entities
