@@ -38,7 +38,7 @@ class SchemaBuilder {
         foreach ($metas as $meta) {
             $classname = '\\' . $meta->getName();
             $reflection = new \ReflectionClass($classname);
-            if ($reflection->implementsInterface('\deschdanja\DoctrineBase\IEntityBase')) {
+            if ($reflection->implementsInterface('\deschdanja\DoctrineBase\Entities\IEntityBase')) {
                 $defs = $classname::getManipulationDefinitions();
                 $fksToAdd = array_merge($fksToAdd, $defs->getFKsToAdd());
                 $fksToRemove = array_merge($fksToRemove, $defs->getFKsToRemove());
