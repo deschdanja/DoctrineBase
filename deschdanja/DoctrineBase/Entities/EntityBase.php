@@ -16,27 +16,30 @@ class EntityBase implements IEntityBase {
     protected $uuidFieldName = "";
     protected $nullableDTOFields;
     protected $nonNullableDTOFields;
-    
+    protected $entityDTOClassname = 'deschdanja\DoctrineBase\Entities\EntityDTO';
+
     public function __construct() {
         $this->nullableDTOFields = array();
         $this->nonNullableDTOFields = array();
     }
 
     /**
-     * returns a StdClass object containing all non object (except DateTime)
-     * public, protected, private variables of the entity
-     * 
-     * this object is NOT connected to the entity at all!
-     * @return \StdClass 
+     * returns DTO filled with entity data
+     *
+     * @return EntityDTO
      */
-    public function getEntityData() {
-        $vars = get_object_vars($this);
-        foreach ($vars as $key => $value) {
-            if (is_object($value) && !$value instanceof \DateTime) {
-                unset($vars[$key]);
+    public function getDTO() {
+        $classname = $this->entityDTOClassname;
+        $dto = new $classname();
+        foreach ($dto as $var) {
+            $getMethod = "get" . ucfirst($var);
+            if(method_exists($this, $getMethod)){
+                $dto->$var = $this->$getMethod();
+            }elseif(property_exists($this, $var)){
+                $dto->$var = $this->$var;
             }
         }
-        return (object) $vars;
+        return $dto;
     }
 
     /**
@@ -51,26 +54,25 @@ class EntityBase implements IEntityBase {
      * @param \deschdanja\DoctrineBase\Entities\EntityDTO $DTO
      */
     public function setDataByDTO(EntityDTO $dto) {
-        foreach($this->nonNullableDTOFields as $arg){
+        foreach ($this->nonNullableDTOFields as $arg) {
             $argname = strtolower($arg);
-            if(!empty($dto->$argname)){
-                $setFunction = "set".$arg;
-                if(method_exists($this, $setFunction)){
+            if (!empty($dto->$argname)) {
+                $setFunction = "set" . $arg;
+                if (method_exists($this, $setFunction)) {
                     $this->$setFunction($dto->$argname);
-                }else{
+                } else {
                     $this->$argname = $dto->$argname;
                 }
-                
             }
         }
-        
-        foreach($this->nullableDTOFields as $arg){
+
+        foreach ($this->nullableDTOFields as $arg) {
             $argname = strtolower($arg);
-            if($dto->$argname !== false){
-                $setFunction = "set".$arg;
-                if(method_exists($this, $setFunction)){
+            if ($dto->$argname !== false) {
+                $setFunction = "set" . $arg;
+                if (method_exists($this, $setFunction)) {
                     $this->$setFunction($dto->$argname);
-                }else{
+                } else {
                     $this->$argname = $dto->$arg;
                 }
             }
@@ -99,5 +101,4 @@ class EntityBase implements IEntityBase {
     }
 
 }
-
 ?>

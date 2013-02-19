@@ -7,14 +7,12 @@ namespace deschdanja\DoctrineBase\Entities;
  * @author Theodor
  */
 interface IEntityBase {
+        
     /**
-     * returns a StdClass object containing all non object (except DateTime)
-     * public, protected, private variables of the entity
-     * 
-     * this object is NOT connected to the entity at all!
-     * @return \StdClass 
+     * returns DTO filled with entity data
+     * @return EntityDTO;
      */
-    public function getEntityData();
+    public function getDTO();
     
     /**
      * Function sets all public parameter in DTO to this Entity

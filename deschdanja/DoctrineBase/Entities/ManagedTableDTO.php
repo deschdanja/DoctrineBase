@@ -3,7 +3,8 @@ namespace deschdanja\DoctrineBase\Entities;
 use deschdanja\DoctrineBase\Exceptions\BaseException;
 
 /**
- * Description of ManagedTableDTO
+ * ManagedTableDTO is the baseclass for all DTOs
+ * extending ManagedTable
  *
  * @author Theodor Stoll <theodor@deschdanja.ch>
  */

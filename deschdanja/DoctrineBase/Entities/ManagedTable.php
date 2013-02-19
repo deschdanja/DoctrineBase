@@ -7,7 +7,8 @@ namespace deschdanja\DoctrineBase\Entities;
  * defines basic fields
  */
 class ManagedTable extends EntityBase{
-    
+    protected $entityDTOClassname = 'deschdanja\DoctrineBase\Entities\ManagedTableDTO';
+            
     /**
      * @var string
      */
