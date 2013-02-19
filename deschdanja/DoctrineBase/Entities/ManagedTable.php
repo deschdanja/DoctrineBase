@@ -23,6 +23,12 @@ class ManagedTable extends EntityBase{
      */
     protected $version;
     
+    public function __construct() {
+        parent::__construct();
+        $nonnullable = array("Lastmodified", "Lastmodifiedby", "Version");
+        $this->nonNullableDTOFields = array_merge($this->nonNullableDTOFields, $nonnullable);
+    }
+    
     public function setLastmodified(){
         $this->lastmodified = new \DateTime("now", new \DateTimeZone("UTC"));
     }
@@ -35,12 +41,12 @@ class ManagedTable extends EntityBase{
         return $this->lastmodified;
     }
     
-    public function setLastmodifiedBy($username){
-        $username = trim(strval($username));
-        if($username == ""){
-            $username = "UNKNOWN";
+    public function setLastmodifiedBy($IDUser){
+        $IDUser = trim(strval($IDUser));
+        if($IDUser == ""){
+            $IDUser = "UNKNOWN";
         }
-        $this->lastmodifiedby = $username;
+        $this->lastmodifiedby = $IDUser;
     }
 }
 

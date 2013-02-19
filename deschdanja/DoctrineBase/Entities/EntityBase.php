@@ -14,6 +14,13 @@ class EntityBase implements IEntityBase {
 
     private $uuidGenerator = "deschdanja\\DoctrineBase\\UUIDGenerator";
     protected $uuidFieldName = "";
+    protected $nullableDTOFields;
+    protected $nonNullableDTOFields;
+    
+    public function __construct() {
+        $this->nullableDTOFields = array();
+        $this->nonNullableDTOFields = array();
+    }
 
     /**
      * returns a StdClass object containing all non object (except DateTime)
@@ -33,23 +40,39 @@ class EntityBase implements IEntityBase {
     }
 
     /**
-     * Function sets all public parameter in DTO to this Entity
+     * Function sets parameters defined in
+     * $this->nonNullableDTOFields and
+     * $this->nullableDTOFields
+     * from the dto to this Entity
      * 
-     * if entity has a setKey method, this will be used
-     * else the value will be set whithout any validation!
+     * using set[Key] method if exists
+     * otherwise value will be set directly whithout any validation!
      * 
-     * @param EntityDTO $DTO
+     * @param \deschdanja\DoctrineBase\Entities\EntityDTO $DTO
      */
-    public function setData(EntityDTO $DTO) {
-        foreach ($DTO as $key => $value) {
-            if (is_string($value)) {
-                $value = trim($value);
+    public function setDataByDTO(EntityDTO $dto) {
+        foreach($this->nonNullableDTOFields as $arg){
+            $argname = strtolower($arg);
+            if(!empty($dto->$argname)){
+                $setFunction = "set".$arg;
+                if(method_exists($this, $setFunction)){
+                    $this->$setFunction($dto->$argname);
+                }else{
+                    $this->$argname = $dto->$argname;
+                }
+                
             }
-            $method = "set" . ucfirst($key);
-            if (method_exists($this, $method)) {
-                $this->$method($value);
-            } else {
-                $this->$key = $value;
+        }
+        
+        foreach($this->nullableDTOFields as $arg){
+            $argname = strtolower($arg);
+            if($dto->$argname !== false){
+                $setFunction = "set".$arg;
+                if(method_exists($this, $setFunction)){
+                    $this->$setFunction($dto->$argname);
+                }else{
+                    $this->$argname = $dto->$arg;
+                }
             }
         }
     }
@@ -64,7 +87,7 @@ class EntityBase implements IEntityBase {
         return new ManipulationDefinitionCollection();
     }
 
-    protected function setUUID() {
+    public function setUUID() {
         $field = strval($this->uuidFieldName);
         if ($field != "") {
             if ($this->$field != "") {

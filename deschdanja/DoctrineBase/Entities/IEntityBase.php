@@ -22,9 +22,9 @@ interface IEntityBase {
      * if entity has a setKey method, this will be used
      * else the value will be set whithout any validation!
      * 
-     * @param EntityDTO $DTO
+     * @param \deschdanja\DoctrineBase\Entities\EntityDTO $dto
      */
-    public function setData(EntityDTO $DTO);
+    public function setDataByDTO(EntityDTO $dto);
     
     /**
      * Function returns IManipulationDefinitionCollection
