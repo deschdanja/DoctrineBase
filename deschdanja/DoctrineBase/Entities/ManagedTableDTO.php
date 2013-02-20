@@ -10,11 +10,11 @@ use deschdanja\DoctrineBase\Exceptions\BaseException;
  */
 class ManagedTableDTO extends EntityDTO{
     
-    protected $lastmodifiedby;
+    public $lastmodifiedby;
     
-    protected $lastmodified;
+    public $lastmodified;
     
-    protected $version;
+    public $version;
 }
 
 ?>

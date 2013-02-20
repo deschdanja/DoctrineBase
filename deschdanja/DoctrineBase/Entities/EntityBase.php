@@ -19,8 +19,7 @@ class EntityBase implements IEntityBase {
     protected $entityDTOClassname = 'deschdanja\DoctrineBase\Entities\EntityDTO';
 
     public function __construct() {
-        $this->nullableDTOFields = array();
-        $this->nonNullableDTOFields = array();
+        $this->setDTOImportFields();
     }
 
     /**
@@ -31,12 +30,12 @@ class EntityBase implements IEntityBase {
     public function getDTO() {
         $classname = $this->entityDTOClassname;
         $dto = new $classname();
-        foreach ($dto as $var) {
-            $getMethod = "get" . ucfirst($var);
+        foreach ($dto as $key => $var) {
+            $getMethod = "get" . ucfirst($key);
             if(method_exists($this, $getMethod)){
-                $dto->$var = $this->$getMethod();
-            }elseif(property_exists($this, $var)){
-                $dto->$var = $this->$var;
+                $dto->$key = $this->$getMethod();
+            }elseif(property_exists($this, $key)){
+                $dto->$key = $this->$key;
             }
         }
         return $dto;
@@ -54,6 +53,10 @@ class EntityBase implements IEntityBase {
      * @param \deschdanja\DoctrineBase\Entities\EntityDTO $DTO
      */
     public function setDataByDTO(EntityDTO $dto) {
+        if(is_null($this->nonNullableDTOFields) || is_null($this->nullableDTOFields)){
+            $this->setDTOImportFields();
+        }
+        
         foreach ($this->nonNullableDTOFields as $arg) {
             $argname = strtolower($arg);
             if (!empty($dto->$argname)) {
@@ -98,6 +101,11 @@ class EntityBase implements IEntityBase {
             $generator = $this->uuidGenerator;
             $this->$field = $generator::createUUID();
         }
+    }
+    
+    protected function setDTOImportFields(){
+        $this->nullableDTOFields = array();
+        $this->nonNullableDTOFields = array();
     }
 
 }
